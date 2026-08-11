@@ -27,4 +27,20 @@ router.get('/stats', (req, res) => {
   res.json({ totalUsers, totalCreditsRemaining, totalGenerations });
 });
 
+// Lets you actually SEE whether Digistore24 (or any other webhook source) is
+// reaching your server and whether the signature check is passing — instead of
+// guessing from Railway's raw logs. status starting with "ok" = worked.
+// "rejected_bad_signature" = the sha_sign check failed (wrong passphrase, or
+// Digistore24 changed their field/algorithm again). "rejected_no_passphrase" =
+// DIGISTORE24_IPN_PASSPHRASE isn't set on the server.
+router.get('/webhooks', (req, res) => {
+  const rows = db.prepare(`
+    SELECT id, source, status, payload, created_at
+    FROM webhook_log
+    ORDER BY created_at DESC
+    LIMIT 50
+  `).all();
+  res.json({ webhooks: rows });
+});
+
 module.exports = router;
