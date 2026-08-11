@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile · AI Script Generator</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-left">
+      <button class="back-btn" id="back-btn" title="Back to tool">←</button>
+      <div class="brand">
+        <div class="brand-mark">🎬</div>
+        <span>My Profile</span>
+      </div>
+    </div>
+    <button class="btn btn-secondary" id="logout-btn">Log out</button>
+  </header>
+
+  <div class="page-wrap" style="max-width: 720px;">
+    <div class="panel">
+      <div class="profile-hero">
+        <div class="avatar-wrap">
+          <img id="avatar-img" src="" alt="Profile picture">
+          <div class="avatar-edit-btn" id="avatar-edit-btn" title="Change photo">✎</div>
+          <input type="file" id="avatar-input" accept="image/png,image/jpeg,image/webp,image/gif" style="display:none;">
+        </div>
+        <div>
+          <div class="profile-name" id="profile-name">–</div>
+          <div class="profile-email" id="profile-email">–</div>
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-chip credits">
+          <div class="stat-label">Credits</div>
+          <div class="stat-value" id="profile-credits">–</div>
+        </div>
+        <div class="stat-chip">
+          <div class="stat-label">Credits expire</div>
+          <div class="stat-value" id="profile-expiry" style="font-size:14px;">–</div>
+        </div>
+      </div>
+
+      <div class="profile-actions">
+        <button class="btn btn-secondary" id="open-avatar-btn">Change profile image</button>
+        <button class="btn btn-secondary" id="open-name-btn">Change name</button>
+        <button class="btn btn-secondary" id="open-password-btn">Reset password</button>
+        <button class="btn btn-secondary" id="forgot-password-btn">Forgot password (email link)</button>
+      </div>
+      <div id="profile-msg" style="margin-top:14px;"></div>
+    </div>
+  </div>
+
+  <!-- Change name modal -->
+  <div class="modal-backdrop" id="name-modal" style="display:none;">
+    <div class="panel modal-box">
+      <div class="page-title" style="font-size:16px;">Change name</div>
+      <div class="field">
+        <label for="new-name">Name</label>
+        <input class="input-3d" id="new-name" type="text">
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-secondary" style="flex:1;" data-close="name-modal">Cancel</button>
+        <button class="btn btn-primary" style="flex:1;" id="save-name-btn">Save</button>
+      </div>
+      <div id="name-error" class="error-text" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- Reset password modal -->
+  <div class="modal-backdrop" id="password-modal" style="display:none;">
+    <div class="panel modal-box">
+      <div class="page-title" style="font-size:16px;">Reset password</div>
+      <div class="field">
+        <label for="current-password">Current password</label>
+        <input class="input-3d" id="current-password" type="password">
+      </div>
+      <div class="field">
+        <label for="new-password-2">New password</label>
+        <input class="input-3d" id="new-password-2" type="password" placeholder="At least 8 characters">
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-secondary" style="flex:1;" data-close="password-modal">Cancel</button>
+        <button class="btn btn-primary" style="flex:1;" id="save-password-btn">Save</button>
+      </div>
+      <div id="password-error" class="error-text" style="display:none;"></div>
+    </div>
+  </div>
+
+  <script src="/js/profile.js"></script>
+</body>
+</html>

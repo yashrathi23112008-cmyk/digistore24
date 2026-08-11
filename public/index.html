@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Script Generator</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-left">
+      <div class="brand">
+        <div class="brand-mark">🎬</div>
+        <span>AI Script Generator</span>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:16px;">
+      <div class="stat-chip credits" style="min-width:auto; padding:8px 16px;">
+        <div class="stat-label">Credits</div>
+        <div class="stat-value" id="header-credits">–</div>
+      </div>
+      <button class="profile-icon-btn" id="profile-btn" title="Your profile">
+        <img id="header-avatar" src="" alt="" style="display:none;">
+        <span class="initials" id="header-initials"></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="page-wrap">
+    <div class="page-title">Generate a video script</div>
+    <div class="page-subtitle">Set your options below, describe your video, and let the AI write it.</div>
+
+    <div class="panel">
+      <div class="select-grid">
+        <div class="field">
+          <label for="tone">Tone</label>
+          <select class="select-3d" id="tone">
+            <option>Casual</option>
+            <option>Professional</option>
+            <option>Energetic</option>
+            <option>Dramatic</option>
+            <option>Humorous</option>
+            <option>Inspirational</option>
+            <option>Calm / Soothing</option>
+            <option>Suspenseful</option>
+            <option>Sarcastic</option>
+            <option>Formal / Documentary</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="duration">Script length</label>
+          <select class="select-3d" id="duration">
+            <option value="60s">60 seconds</option>
+            <option value="5m">5 minutes</option>
+            <option value="10m">10 minutes</option>
+            <option value="15m">15 minutes</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="language">Language</label>
+          <select class="select-3d" id="language">
+            <option>English</option>
+            <option>Hindi</option>
+            <option>Spanish</option>
+            <option>French</option>
+            <option>German</option>
+            <option>Portuguese</option>
+            <option>Arabic</option>
+            <option>Japanese</option>
+            <option>Korean</option>
+            <option>Chinese (Simplified)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="videoType">Video type</label>
+          <select class="select-3d" id="videoType">
+            <option>Horror</option>
+            <option>Educational</option>
+            <option>Motivational</option>
+            <option>Product Review</option>
+            <option>Storytelling</option>
+            <option>Comedy / Skit</option>
+            <option>News / Facts</option>
+            <option>Tutorial / How-to</option>
+            <option>Documentary</option>
+            <option>Vlog</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="panel" style="background: linear-gradient(160deg, #14161f, #0d0f15); margin-top: 4px; padding: 0;">
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Image prompts</div>
+            <div class="toggle-desc">Add an AI image prompt after every scene (doubles the credit cost)</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="imagePromptsToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top: 20px;">
+        <label for="details">Describe your video (max 1000 words)</label>
+        <textarea class="input-3d" id="details" placeholder="Write what the video is about, key points to cover, characters, hook, call to action, etc."></textarea>
+        <div class="word-count" id="word-count">0 / 1000 words</div>
+      </div>
+
+      <button class="btn btn-primary btn-block btn-glow" id="generate-btn">
+        <span id="generate-btn-label">Generate script — costs 1 credit</span>
+      </button>
+      <div id="generate-error" class="error-text" style="display:none;"></div>
+    </div>
+
+    <div class="panel" id="result-panel" style="display:none;">
+      <div class="page-title" style="font-size:16px; margin-bottom:16px;">Your script</div>
+      <div id="result-content"></div>
+    </div>
+  </div>
+
+  <script src="/js/tool.js"></script>
+</body>
+</html>

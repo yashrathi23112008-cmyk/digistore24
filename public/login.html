@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in · AI Script Generator</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="center-screen">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="brand-mark" style="margin:0 auto 14px;">🎬</div>
+        <div style="font-weight:700; font-size:19px;">AI Script Generator</div>
+        <div class="muted" style="font-size:13px; margin-top:4px;">Log in to your account</div>
+      </div>
+
+      <div class="panel" id="login-panel">
+        <div class="field">
+          <label for="email">Email</label>
+          <input class="input-3d" type="email" id="email" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input class="input-3d" type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="btn btn-primary btn-block btn-glow" id="login-btn">Log in</button>
+        <div id="login-error" class="error-text" style="display:none;"></div>
+
+        <div style="text-align:center; margin-top:16px;">
+          <a href="#" id="forgot-link" style="font-size:13px; color: var(--accent-2);">Forgot your password?</a>
+        </div>
+      </div>
+
+      <div class="panel" id="forgot-panel" style="display:none;">
+        <p class="muted" style="font-size:13.5px; margin-top:0;">Enter your email and we'll send you a reset link.</p>
+        <div class="field">
+          <label for="forgot-email">Email</label>
+          <input class="input-3d" type="email" id="forgot-email" placeholder="you@example.com">
+        </div>
+        <button class="btn btn-primary btn-block" id="forgot-btn">Send reset link</button>
+        <div id="forgot-msg" class="success-text" style="display:none;"></div>
+        <div style="text-align:center; margin-top:16px;">
+          <a href="#" id="back-to-login" style="font-size:13px; color: var(--text-dim);">← Back to login</a>
+        </div>
+      </div>
+
+      <div class="panel" id="reset-panel" style="display:none;">
+        <p class="muted" style="font-size:13.5px; margin-top:0;">Choose a new password.</p>
+        <div class="field">
+          <label for="new-password">New password</label>
+          <input class="input-3d" type="password" id="new-password" placeholder="At least 8 characters">
+        </div>
+        <button class="btn btn-primary btn-block" id="reset-btn">Set new password</button>
+        <div id="reset-msg" class="error-text" style="display:none;"></div>
+      </div>
+
+      <p class="muted" style="text-align:center; font-size:12px; margin-top:22px;">
+        Don't have an account yet? Purchase the plan and your login details will be emailed to you.
+      </p>
+    </div>
+  </div>
+
+  <script src="/js/auth.js"></script>
+</body>
+</html>
