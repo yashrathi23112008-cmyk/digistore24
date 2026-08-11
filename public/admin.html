@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin · AI Script Generator</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-left">
+      <button class="back-btn" id="back-btn" title="Back to tool">←</button>
+      <div class="brand">
+        <div class="brand-mark">🛡️</div>
+        <span>Admin Panel</span>
+      </div>
+    </div>
+    <button class="btn btn-secondary" id="logout-btn">Log out</button>
+  </header>
+
+  <div class="page-wrap" style="max-width: 1100px;">
+    <div class="page-title">All users</div>
+    <div class="page-subtitle">This page is only visible to admin accounts. It refreshes automatically.</div>
+
+    <div class="stat-row" style="margin-bottom:20px;">
+      <div class="stat-chip"><div class="stat-label">Total users</div><div class="stat-value" id="stat-users">–</div></div>
+      <div class="stat-chip"><div class="stat-label">Credits remaining (all users)</div><div class="stat-value" id="stat-credits">–</div></div>
+      <div class="stat-chip"><div class="stat-label">Scripts generated</div><div class="stat-value" id="stat-generations">–</div></div>
+    </div>
+
+    <div class="panel">
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Address</th>
+              <th>Phone</th>
+              <th>Credits</th>
+              <th>Expiry date</th>
+            </tr>
+          </thead>
+          <tbody id="users-tbody">
+            <tr><td colspan="6" class="muted">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>
