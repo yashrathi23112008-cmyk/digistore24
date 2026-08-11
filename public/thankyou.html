@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thank you! · AI Script Generator</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="center-screen">
+    <div class="auth-card" style="max-width: 480px;">
+      <div class="panel" style="text-align:center;">
+        <div class="brand-mark" style="margin: 0 auto 18px; width:56px; height:56px; font-size:26px;">✅</div>
+
+        <div class="page-title" id="thanks-title" style="font-size: 22px; margin-bottom: 10px;">
+          Thank you for your purchase!
+        </div>
+
+        <p class="muted" style="font-size: 14.5px; line-height:1.6;">
+          Your order is confirmed<span id="order-id-line"></span>. We're setting up your account
+          right now — you'll get an email at <b id="thanks-email">your inbox</b> within the next
+          few minutes with your login details and a temporary password.
+        </p>
+
+        <p class="muted" style="font-size: 13px; line-height:1.6; margin-top: 14px;">
+          Don't see it? Check your spam/promotions folder. If it still hasn't arrived after
+          15 minutes, contact support and mention your order number above.
+        </p>
+
+        <a href="/login.html" class="btn btn-primary btn-block btn-glow" style="margin-top: 22px;">
+          Go to login
+        </a>
+      </div>
+
+      <p class="muted" style="text-align:center; font-size:12px; margin-top:22px;">
+        Questions about your order? Email <a href="mailto:support@yourdomain.com" style="color:var(--accent-2);">support@yourdomain.com</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Digistore24 can append order details as GET parameters to this URL, e.g.:
+    //   https://yourdomain.com/thankyou.html?email=[CUSTOMER_EMAIL]&order_id=[ORDER_ID]&first_name=[BUYER_FIRST_NAME]
+    // Enable this under: My products > (edit product) > "Append order data to
+    // thank you page URL" -> Yes. Then set this page's URL as the product's
+    // thank you page URL, using the placeholders above.
+    //
+    // This is purely cosmetic personalization — the ACTUAL account creation
+    // happens separately and reliably via the /webhook/digistore24 IPN handler,
+    // not from anything read here. Never trust query parameters on this page
+    // for anything security-sensitive.
+    const params = new URLSearchParams(window.location.search);
+    const email = params.get('email') || params.get('customer_email') || params.get('buyer_email');
+    const firstName = params.get('first_name') || params.get('buyer_first_name');
+    const orderId = params.get('order_id');
+
+    if (email) {
+      document.getElementById('thanks-email').textContent = email;
+    }
+    if (firstName) {
+      document.getElementById('thanks-title').textContent = `Thank you, ${firstName}!`;
+    }
+    if (orderId) {
+      document.getElementById('order-id-line').textContent = ` (order #${orderId})`;
+    }
+  </script>
+</body>
+</html>
