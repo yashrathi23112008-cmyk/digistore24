@@ -75,7 +75,11 @@ function signaturesMatch(expectedHex, receivedHex) {
 router.post('/digistore24', express.urlencoded({ extended: true }), async (req, res) => {
   const body = req.body || {};
   try {
-    const passphrase = process.env.DIGISTORE24_IPN_PASSPHRASE;
+    // .trim() matters: Railway (and copy/paste in general) can silently add a
+    // trailing space or newline to a pasted env var, which breaks an exact
+    // string match — the exact same class of bug the server already warns
+    // about for JWT_SECRET at startup.
+    const passphrase = (process.env.DIGISTORE24_IPN_PASSPHRASE || '').trim();
     const receivedSign = body.sha_sign;
 
     if (!passphrase) {
@@ -90,7 +94,15 @@ router.post('/digistore24', express.urlencoded({ extended: true }), async (req, 
 
     const expectedSign = computeDigistoreSignature(body, passphrase);
     if (!signaturesMatch(expectedSign, receivedSign)) {
-      logWebhook('digistore24', body, 'rejected_bad_signature');
+      // Log both signatures (never the passphrase itself) so you can see in
+      // the Admin panel's Webhook Log exactly what's mismatching — e.g. if
+      // they differ entirely (wrong passphrase) vs. share a prefix (a field
+      // Digistore24 sends that this code isn't accounting for yet).
+      logWebhook('digistore24', {
+        ...body,
+        _debug_expected_signature: expectedSign,
+        _debug_received_signature: String(receivedSign).toUpperCase(),
+      }, 'rejected_bad_signature');
       return res.status(401).send('Invalid signature.');
     }
 
