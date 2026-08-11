@@ -21,7 +21,7 @@ async function loadUsers() {
   const tbody = document.getElementById('users-tbody');
 
   if (!users.length) {
-    tbody.innerHTML = '<tr><td colspan="6" class="muted">No users yet.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" class="muted">No users yet.</td></tr>';
     return;
   }
 
@@ -33,8 +33,30 @@ async function loadUsers() {
       <td>${escapeHtml(u.phone) || '<span class="muted">—</span>'}</td>
       <td>${u.credits}</td>
       <td>${u.expiry_date ? new Date(u.expiry_date).toLocaleDateString() : '<span class="muted">—</span>'}</td>
+      <td><button class="btn btn-secondary" style="padding:6px 12px; font-size:12.5px;" onclick="resetPassword('${u.id}', '${escapeHtml(u.email)}')">Reset password</button></td>
     </tr>
   `).join('');
+}
+
+// Generates a new password for a user and shows it once, so you can send it to
+// the customer yourself while lib/mailer.js is still a stub (or as a manual
+// override any time). The password is never shown again after this.
+async function resetPassword(userId, email) {
+  if (!confirm(`Generate a new password for ${email}? Their old password will stop working immediately.`)) return;
+
+  const resultEl = document.getElementById('reset-result');
+  try {
+    const res = await fetch(`/api/admin/users/${userId}/reset-password`, { method: 'POST' });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Could not reset password.');
+
+    resultEl.style.display = 'block';
+    resultEl.innerHTML = `New password for <b>${escapeHtml(data.email)}</b>: <code style="background:#0d0f15; padding:2px 8px; border-radius:6px;">${escapeHtml(data.tempPassword)}</code> — copy this now, it won't be shown again.`;
+  } catch (err) {
+    resultEl.style.display = 'block';
+    resultEl.className = 'error-text';
+    resultEl.textContent = err.message;
+  }
 }
 
 async function loadStats() {
