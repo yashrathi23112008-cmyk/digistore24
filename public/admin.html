@@ -47,6 +47,30 @@
         </table>
       </div>
     </div>
+
+    <div class="panel" style="margin-top:24px;">
+      <div class="page-title" style="font-size:16px; margin-bottom:6px;">Webhook log (Digistore24)</div>
+      <div class="page-subtitle" style="margin-bottom:16px;">
+        Every incoming purchase notification, most recent first. A status starting with
+        <b>ok</b> means it worked. <b>rejected_bad_signature</b> means the passphrase or
+        signature check failed — no account was created. Click a row to see the raw payload.
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Source</th>
+              <th>Status</th>
+              <th>Payload</th>
+            </tr>
+          </thead>
+          <tbody id="webhooks-tbody">
+            <tr><td colspan="4" class="muted">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
   <script src="/js/admin.js"></script>
