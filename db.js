@@ -66,9 +66,12 @@ function nowISO() {
 
 // --- bootstrap the admin account from .env, if it doesn't exist yet ---
 function ensureAdmin() {
-  const email = (process.env.ADMIN_EMAIL || '').toLowerCase().trim();
-  const password = process.env.ADMIN_PASSWORD;
-  if (!email || !password) return;
+  const email = (process.env.ADMIN_EMAIL || '').trim().toLowerCase();
+  const password = (process.env.ADMIN_PASSWORD || '').trim();
+  if (!email || !password) {
+    console.warn('[db] ADMIN_EMAIL / ADMIN_PASSWORD not set — no admin account was created. Set both in your environment and restart to create one.');
+    return;
+  }
 
   const existing = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
   if (existing) {
