@@ -1,6 +1,8 @@
 // routes/admin.js
 const express = require('express');
-const { db } = require('../db');
+const crypto = require('node:crypto');
+const bcrypt = require('bcryptjs');
+const { db, nowISO } = require('../db');
 const { requireAuth, requireAdmin } = require('../lib/auth');
 
 const router = express.Router();
@@ -41,6 +43,24 @@ router.get('/webhooks', (req, res) => {
     LIMIT 50
   `).all();
   res.json({ webhooks: rows });
+});
+
+// Manually generates a new password for a user and returns it in the response,
+// ONE TIME, so you can relay it to a customer yourself (WhatsApp, email, etc.)
+// This is a stopgap for as long as lib/mailer.js is still a stub that only
+// prints emails to your server logs instead of actually sending them — once
+// you wire up a real email provider there, customers won't need this.
+router.post('/users/:id/reset-password', (req, res) => {
+  const user = db.prepare('SELECT * FROM users WHERE id = ? AND is_admin = 0').get(req.params.id);
+  if (!user) return res.status(404).json({ error: 'User not found.' });
+
+  const tempPassword = crypto.randomBytes(9).toString('base64url');
+  const hash = bcrypt.hashSync(tempPassword, 12);
+
+  db.prepare('UPDATE users SET password_hash = ?, updated_at = ? WHERE id = ?')
+    .run(hash, nowISO(), user.id);
+
+  res.json({ email: user.email, tempPassword });
 });
 
 module.exports = router;
