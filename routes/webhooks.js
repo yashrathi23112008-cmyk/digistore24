@@ -1,10 +1,10 @@
 // routes/webhooks.js
 //
-// IMPORTANT: Payment providers change their exact signature/verification method
-// from time to time. The logic below follows each provider's commonly documented
-// scheme, but BEFORE going live you must open your Digistore24 / Whop dashboard
-// docs and confirm the parameter names and signing method still match this code.
-// Test with their "send test webhook" button first.
+// IMPORTANT: Digistore24 occasionally adjusts the exact IPN field names/signing
+// method. The logic below follows their commonly documented scheme, but BEFORE
+// going live you must open your Digistore24 account's IPN documentation and
+// confirm the parameter names and signing method still match this code.
+// Test with their "send test IPN" button first.
 
 const express = require('express');
 const crypto = require('node:crypto');
@@ -85,66 +85,6 @@ router.post('/digistore24', express.urlencoded({ extended: true }), async (req, 
   } catch (err) {
     console.error('Digistore24 webhook error:', err);
     logWebhook('digistore24', req.body, 'error_' + err.message);
-    res.status(500).send('Error');
-  }
-});
-
-// ---------------------------------------------------------------------------
-// Whop webhook
-// Whop signs the RAW request body with HMAC-SHA256 using your webhook signing
-// secret, sent in a header (commonly "whop-signature" or "x-whop-signature").
-// Confirm the exact header name and scheme in your Whop developer dashboard.
-// ---------------------------------------------------------------------------
-router.post('/whop', express.raw({ type: 'application/json' }), async (req, res) => {
-  try {
-    const secret = process.env.WHOP_WEBHOOK_SECRET;
-    const signatureHeader = req.headers['whop-signature'] || req.headers['x-whop-signature'];
-
-    if (!secret) {
-      console.error('WHOP_WEBHOOK_SECRET is not set — rejecting webhook.');
-      logWebhook('whop', {}, 'rejected_no_secret');
-      return res.status(500).send('Server not configured.');
-    }
-    if (!signatureHeader) {
-      logWebhook('whop', {}, 'rejected_no_signature');
-      return res.status(400).send('Missing signature.');
-    }
-
-    const rawBody = req.body; // Buffer, because of express.raw() above
-    const expected = crypto.createHmac('sha256', secret).update(rawBody).digest('hex');
-
-    const providedSig = String(signatureHeader).replace(/^sha256=/, '');
-    const validSig = expected.length === providedSig.length &&
-      crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(providedSig));
-
-    if (!validSig) {
-      logWebhook('whop', {}, 'rejected_bad_signature');
-      return res.status(401).send('Invalid signature.');
-    }
-
-    const event = JSON.parse(rawBody.toString('utf8'));
-    logWebhook('whop', event, 'received');
-
-    // Adjust these event-type checks to match what Whop actually sends for
-    // "membership went valid / payment succeeded" in your dashboard's docs.
-    const okTypes = ['membership.went_valid', 'payment.succeeded'];
-    if (!okTypes.includes(event.type)) {
-      return res.status(200).send('OK');
-    }
-
-    const data = event.data || {};
-    await grantOrRenewPlan({
-      name: data.user?.name || data.name,
-      email: data.user?.email || data.email,
-      phone: data.user?.phone || '',
-      address: data.user?.address || '',
-      source: 'whop',
-    });
-
-    res.status(200).send('OK');
-  } catch (err) {
-    console.error('Whop webhook error:', err);
-    logWebhook('whop', {}, 'error_' + err.message);
     res.status(500).send('Error');
   }
 });
